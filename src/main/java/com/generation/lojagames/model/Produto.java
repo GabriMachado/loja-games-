@@ -1,49 +1,58 @@
 package com.generation.lojagames.model;
-import java.time.LocalDateTime;
 
-import org.hibernate.annotations.UpdateTimestamp;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "tb_produtos")
+@Entity                                             		
+@Table(name = "tb_produtos")	
 public class Produto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
-	private Long id; 
 	
-    @NotBlank(message = "O atributo Nome é OBRIGATÓRIO!")
-    @Size(min = 5, max = 100, message = "O atributo título deve ter no mínimo 5 e no máximo 100 cacteres.")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	private Long id;
+	
+	@NotNull(message = "Nome é obrigatório!")                                       										
 	private String nome;
 	
-    
-    @NotBlank(message = "O atributo Descrição é OBRIGATÓRIO!")
-    @Size(min = 10, max = 1000, message = "O atributo texto deve ter no mínimo 5 e no máximo 100 cacteres.")
-	private String descricao; 
-    
-    @NotBlank(message = "O atributo Console é OBRIGATÓRIO!")
-    @Size(min = 10, max = 100, message = "O atributo texto deve ter no mínimo 5 e no máximo 100 cacteres.")
-	private String console;
-    
-    @PositiveOrZero
-    private int quatidade;
+	@Size(max=500)
+	private String descricao;
 	
-   /* @UpdateTimestamp
-	private LocalDateTime data_lancamento;*/
-    
-    @ManyToOne
+	@NotNull(message = "Console é obrigatório!")
+	private String console;
+	
+	private int quantidade;
+	
+	@Column(name = "data_lancamento")
+	@JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataLancamento;
+	
+	@NotNull(message = "Preço é obrigatório!")
+	@Positive(message = "O preço deve ser maior do que zero!")
+	private BigDecimal preco;
+	
+	private String foto;
+
+	@Column(columnDefinition = "integer default 0")
+	private int curtir;
+
+	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Categoria categoria;
+
 
 	public Long getId() {
 		return id;
@@ -77,24 +86,46 @@ public class Produto {
 		this.console = console;
 	}
 
-	public int getQuatidade() {
-		return quatidade;
+	public int getQuantidade() {
+		return quantidade;
 	}
 
-	public void setQuatidade(int quatidade) {
-		this.quatidade = quatidade;
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 
-	/*public LocalDateTime getData_lancamento() {
-		return data_lancamento;
+	public BigDecimal getPreco() {
+		return preco;
 	}
 
-	public void setData_lancamento(LocalDateTime data_lancamento) {
-		this.data_lancamento = data_lancamento;
-	}*/
+	public void setPreco(BigDecimal preco) {
+		this.preco = preco;
+	}
 
-	
-	// GET SET Categoria //
+	public String getFoto() {
+		return this.foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public LocalDate getDataLancamento() {
+		return this.dataLancamento;
+	}
+
+	public void setDataLancamento(LocalDate dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+
+	public int getCurtir() {
+		return this.curtir;
+	}
+
+	public void setCurtir(int curtir) {
+		this.curtir = curtir;
+	}
+
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -102,11 +133,5 @@ public class Produto {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-    
-    
-    
+
 }
-    
-    
-    
-	
